@@ -969,6 +969,8 @@ public abstract class EntityLiving extends Entity {
 	this.motY /= frictionVertical;
         this.motZ /= frictionHorizontal;
 
+	this.motY = knockbackVertical;
+
         this.motX -= d0 / (double)f1 * ((double)f2 - rangeReduction);
         this.motZ -= d1 / (double)f1 * ((double)f2 - rangeReduction);
 
