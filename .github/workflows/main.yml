@@ -33,6 +33,6 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Spigot-V-$GITHUB_RUN_NUMBER
+          name: SpigotV
           path: spigotv-server/target/SpigotV.jar
           if-no-files-found: error
