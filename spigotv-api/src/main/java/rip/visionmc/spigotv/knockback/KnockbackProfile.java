@@ -30,13 +30,5 @@ public interface KnockbackProfile {
 
     void setRangeFactor(double rangeFactor);
 
-    double getHorizontalFriction();
-
-    void setHorizontalFriction(double horizontalFriction);
-
-    double getVerticalFriction();
-
-    void setVerticalFriction(double verticalFriction);
-
     void save();
 }

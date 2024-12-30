@@ -36,8 +36,6 @@ public class KnockbackCommand extends Command {
                 ChatColor.GOLD + "/kb maxrange <name> <double>" + ChatColor.WHITE + " - " + ChatColor.YELLOW + "Set max range",
                 ChatColor.GOLD + "/kb startrange <name> <double>" + ChatColor.WHITE + " - " + ChatColor.YELLOW + "Set start range",
                 ChatColor.GOLD + "/kb rangefactor <name> <double>" + ChatColor.WHITE + " - " + ChatColor.YELLOW + "Set range factor",
-		ChatColor.GOLD + "/kb horfriction <name> <double>" + ChatColor.WHITE + " - " + ChatColor.YELLOW + "Set horizontal friction",
-		ChatColor.GOLD + "/kb verfriction <name> <double>" + ChatColor.WHITE + " - " + ChatColor.YELLOW + "Set vertical friction",
 		" ",
         }, "\n"));
     }
@@ -258,50 +256,6 @@ public class KnockbackCommand extends Command {
                     }
 
                     profile.setRangeFactor(Double.parseDouble(args[2]));
-                    profile.save();
-
-                    sender.sendMessage(ChatColor.GOLD + "You have updated " + ChatColor.YELLOW + profile.getName() + ChatColor.GOLD + "'s values to:");
-
-                    for (String value : profile.getValues()) {
-                        sender.sendMessage(ChatColor.YELLOW + "* " + value);
-                    }
-                } else {
-                    sender.sendMessage(ChatColor.RED + "Wrong syntax.");
-                }
-            }
-            break;
-            case "horfriction": {
-                if (args.length == 3 && NumberUtils.isNumber(args[2])) {
-                    KnockbackProfile profile = SpigotV.INSTANCE.getConfig().getKbProfileByName(args[1]);
-
-                    if (profile == null) {
-                        sender.sendMessage(ChatColor.RED + "A profile with that name could not be found.");
-                        return true;
-                    }
-
-                    profile.setHorizontalFriction(Double.parseDouble(args[2]));
-                    profile.save();
-
-                    sender.sendMessage(ChatColor.GOLD + "You have updated " + ChatColor.YELLOW + profile.getName() + ChatColor.GOLD + "'s values to:");
-
-                    for (String value : profile.getValues()) {
-                        sender.sendMessage(ChatColor.YELLOW + "* " + value);
-                    }
-                } else {
-                    sender.sendMessage(ChatColor.RED + "Wrong syntax.");
-                }
-            }
-            break;
-            case "verfriction": {
-                if (args.length == 3 && NumberUtils.isNumber(args[2])) {
-                    KnockbackProfile profile = SpigotV.INSTANCE.getConfig().getKbProfileByName(args[1]);
-
-                    if (profile == null) {
-                        sender.sendMessage(ChatColor.RED + "A profile with that name could not be found.");
-                        return true;
-                    }
-
-                    profile.setVerticalFriction(Double.parseDouble(args[2]));
                     profile.save();
 
                     sender.sendMessage(ChatColor.GOLD + "You have updated " + ChatColor.YELLOW + profile.getName() + ChatColor.GOLD + "'s values to:");

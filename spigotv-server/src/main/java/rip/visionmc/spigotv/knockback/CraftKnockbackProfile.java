@@ -16,8 +16,6 @@ public class CraftKnockbackProfile implements KnockbackProfile {
     private double maxRange = 1.2D;
     private double startRange = 3.0D;
     private double rangeFactor = 0.025D;
-    private double horizontalFriction = 1.0D;
-    private double verticalFriction = 60.0D;
 
     public CraftKnockbackProfile(String name) {
         this.name = name;
@@ -36,8 +34,6 @@ public class CraftKnockbackProfile implements KnockbackProfile {
                 ChatColor.GOLD + "Max Range" + ChatColor.WHITE + ": " + this.maxRange,
                 ChatColor.GOLD + "Start Range" + ChatColor.WHITE + ": " + this.startRange,
                 ChatColor.GOLD + "Range Factor" + ChatColor.WHITE + ": " + this.rangeFactor,
-                ChatColor.GOLD + "Horizontal Friction" + ChatColor.WHITE + ": " + this.horizontalFriction,
-                ChatColor.GOLD + "Vertical Friction" + ChatColor.WHITE + ": " + this.verticalFriction
         };
     }
 
@@ -50,8 +46,6 @@ public class CraftKnockbackProfile implements KnockbackProfile {
         SpigotV.INSTANCE.getConfig().set(path + ".maxRange", this.maxRange);
         SpigotV.INSTANCE.getConfig().set(path + ".startRange", this.startRange);
         SpigotV.INSTANCE.getConfig().set(path + ".rangeFactor", this.rangeFactor);
-        SpigotV.INSTANCE.getConfig().set(path + ".horizontalFriction", this.horizontalFriction);
-        SpigotV.INSTANCE.getConfig().set(path + ".verticalFriction", this.verticalFriction);
         SpigotV.INSTANCE.getConfig().save();
     }
 }

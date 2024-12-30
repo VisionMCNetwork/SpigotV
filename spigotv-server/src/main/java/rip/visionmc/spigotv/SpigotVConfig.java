@@ -112,8 +112,6 @@ public class SpigotVConfig {
 	    profile.setMaxRange(this.getDouble(path + ".maxRange", 1.2D));
 	    profile.setStartRange(this.getDouble(path + ".startRange", 3.0D));
 	    profile.setRangeFactor(this.getDouble(path + ".rangeFactor", 0.025D));
-	    profile.setHorizontalFriction(this.getDouble(path + ".horizontalFriction", 1.0D));
-	    profile.setVerticalFriction(this.getDouble(path + ".verticalFriction", 60.0D));
 	}
 
         this.currentKb = this.getKbProfileByName(this.getString("knockback.current", "default"));
@@ -135,9 +133,9 @@ public class SpigotVConfig {
         this.disableJoinMessage = this.getBoolean("disable-join-message", true);
         this.disableLeaveMessage = this.getBoolean("disable-leave-message", true);
         SpigotVBridge.disableOpPermissions = this.getBoolean("disable-op", false);
-        this.potionVerticalOffset = this.getFloat("potion-vertical-offset", (float) -15.0);
-        this.potionMultiplier = this.getFloat("potion-multiplier", (float) 0.5);
-        this.potionGravity = this.getFloat("potion-gravity", (float) 0.03);
+        this.potionVerticalOffset = this.getFloat("potion-vertical-offset", -15.0F);
+        this.potionMultiplier = this.getFloat("potion-multiplier", 0.593F);
+        this.potionGravity = this.getFloat("potion-gravity", 0.05F);
         try {
             this.config.save(this.configFile);
         } catch (IOException ex) {

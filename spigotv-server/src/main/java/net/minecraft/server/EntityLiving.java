@@ -959,15 +959,15 @@ public abstract class EntityLiving extends Entity {
         double rangeReduction = this.calculateModifiedRange(distance);
         double knockbackHorizontal = profile.getHorizontal();
         double knockbackVertical = profile.getVertical();
+        double frictionHorizontal = 2.0 - (1.0 - knockbackHorizontal);
+        double frictionVertical = 2.0 - (1.0 - knockbackVertical);
 
 	float f1 = MathHelper.sqrt(d0 * d0 + d1 * d1);
 	float f2 = (float)(0.4 * (1.0 - 0.4 * (1.0 - knockbackHorizontal)));
 
-	this.motX /= profile.getHorizontalFriction();
-	this.motZ /= profile.getHorizontalFriction();
-	this.motY /= profile.getVerticalFriction();
-
-	this.motY = profile.getVertical();
+        this.motX /= frictionHorizontal;
+	this.motY /= frictionVertical;
+        this.motZ /= frictionHorizontal;
 
         this.motX -= d0 / (double)f1 * ((double)f2 - rangeReduction);
         this.motZ -= d1 / (double)f1 * ((double)f2 - rangeReduction);
