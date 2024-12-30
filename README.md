@@ -1,7 +1,6 @@
 # VisionMC SpigotX Fork - SpigotV
  
 - Practice Server Spigot with the following:
-  - Customizable KB with X/Y frictions
   - Customizable potions
   - Range Reduction Knockback
   - Full Java 17 Support 
