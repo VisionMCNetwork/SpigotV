@@ -9,6 +9,7 @@ import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.util.Vector;
 import rip.visionmc.spigotv.SpigotV;
 import rip.visionmc.spigotv.knockback.KnockbackProfile;
 
@@ -1015,18 +1016,20 @@ public abstract class EntityHuman extends EntityLiving {
                     this.setSprinting(false);
                     if (entity instanceof EntityPlayer && entity.velocityChanged) {
                         EntityPlayer attackedPlayer = (EntityPlayer) entity;
-                        PlayerVelocityEvent event = new PlayerVelocityEvent(attackedPlayer.getBukkitEntity(), attackedPlayer.getBukkitEntity().getVelocity());
+			Vector velocity = new Vector(d0, d1, d2);
+                        PlayerVelocityEvent event = new PlayerVelocityEvent(player, velocity.clone());
                         this.world.getServer().getPluginManager().callEvent(event);
 
                         if (!event.isCancelled()) {
-                            attackedPlayer.getBukkitEntity().setVelocityDirect(event.getVelocity());
-                            attackedPlayer.playerConnection.sendPacket(new PacketPlayOutEntityVelocity(attackedPlayer));
+                            if (!velocity.equals(event.getVelocity())) {
+                                player.setVelocity(event.getVelocity());
+                            }
+                            ((EntityPlayer)entity).playerConnection.sendPacket(new PacketPlayOutEntityVelocity(entity));
+                            entity.velocityChanged = false;
+                            entity.motX = d0;
+                            entity.motY = d1;
+                            entity.motZ = d2;
                         }
-
-                        entity.velocityChanged = false;
-                        entity.motX = d0;
-                        entity.motY = d1;
-                        entity.motZ = d2;
                     }
 
                     // MMC end
