@@ -27,6 +27,7 @@
 [KewlSpigot-????] Add-configurable-potions.patch
 [KewlSpigot-????] Add-chunk-snapshot-api.patch
 [KewlSpigot-????] Optimize-imports.patch
+[KewlSpigot-????] Remove-the-site-reporting-plugin-packets.patch
 
 [FoxSpigot-????] Improve-hit-registration.patch
 
