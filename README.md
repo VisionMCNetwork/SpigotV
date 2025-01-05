@@ -10,10 +10,15 @@
 - Patches
 
 ```
-[SpigotV-0001] Add-range-reduction.patch
-[SpigotV-0002] Change-knockback-math.patch
-[SpigotV-0003] Fix-maven-repositories.patch
-[SpigotV-0004] Update-libraries.patch
+[SpigotV-0001] Fix-maven-repositories.patch
+[SpigotV-0002] Rewrite-parts-of-config.patch
+[SpigotV-0003] Update-libraries.patch
+[SpigotV-0004] Change-knockback-math.patch
+[SpigotV-0005] Add-range-reduction.patch
+
+[ClubSpigot-????] Implement-knockback-reduction.patch
+[ClubSpigot-????] Implement-range-reduction.patch
+[ClubSpigot-????] Optimize-velocity-packet.patch
 
 [GoatSpigot-????] Custom-tps-command.patch
 
