@@ -1015,7 +1015,7 @@ public abstract class EntityHuman extends EntityLiving {
                     entity.g(-MathHelper.sin(this.yaw * (float)Math.PI / 180.0f) * (float)i * 0.5f, 0.1, MathHelper.cos(this.yaw * (float)Math.PI / 180.0f) * (float)i * 0.5f);
                     this.setSprinting(false);
                     if (entity instanceof EntityPlayer && entity.velocityChanged) {
-                        EntityPlayer attackedPlayer = (EntityPlayer) entity;
+                        Player player = (Player)((Object)entity.getBukkitEntity());
 			Vector velocity = new Vector(d0, d1, d2);
                         PlayerVelocityEvent event = new PlayerVelocityEvent(player, velocity.clone());
                         this.world.getServer().getPluginManager().callEvent(event);
