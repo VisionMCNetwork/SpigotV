@@ -102,9 +102,12 @@ public class DataWatcher {
 
     public DataWatcher clone() {
         DataWatcher newWatcher = new DataWatcher(this.a);
+        int[] var2;
+        int var3 = (var2 = this.dataValues.keys()).length;
 
-        for (int i : this.dataValues.keys()) {
-            newWatcher.a(i, ((WatchableObject) this.dataValues.get(i)).b());
+        for(int var4 = 0; var4 < var3; ++var4) {
+            int i = var2[var4];
+            newWatcher.a(i, ((WatchableObject)this.dataValues.get(i)).b());
         }
 
         return newWatcher;

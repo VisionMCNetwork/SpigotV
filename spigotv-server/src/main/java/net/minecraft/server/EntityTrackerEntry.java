@@ -279,23 +279,22 @@ public class EntityTrackerEntry {
         boolean isPlayer = this.tracker instanceof EntityPlayer;
 
         if (isPlayer) {
-            fakingDeath = ((EntityPlayer) this.tracker).isFakingDeath();
+            fakingDeath = ((EntityPlayer)this.tracker).isFakingDeath();
         }
+
         if (datawatcher.a() || fakingDeath) {
-            if (isPlayer) {
-                if (fakingDeath) {
-                    datawatcher.watch(6, 0.0F);
-                    ((EntityPlayer) this.tracker).setFakingDeath(false);
-                }
+            if (isPlayer && fakingDeath) {
+                datawatcher.watch(6, 0.0F);
+                ((EntityPlayer)this.tracker).setFakingDeath(false);
             }
+
             this.broadcast(new PacketPlayOutEntityMetadata(this.tracker.getId(), datawatcher, false));
-	        //Update the metadata we send to the player we're tracking itself,
-	        //because we're faking some metadata to the other players..
+
             if (isPlayer) {
                 DataWatcher otherWatcher = datawatcher.clone();
-                EntityPlayer player = ((EntityPlayer) this.tracker);
+                EntityPlayer player = (EntityPlayer)this.tracker;
                 otherWatcher.watch(6, player.getHealth());
-	            player.playerConnection.sendPacket(new PacketPlayOutEntityMetadata(this.tracker.getId(), otherWatcher, false));
+                player.playerConnection.sendPacket(new PacketPlayOutEntityMetadata(this.tracker.getId(), otherWatcher, false));
             }
         }
 

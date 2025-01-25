@@ -56,7 +56,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
     public boolean collidesWithEntities = true;
     public int viewDistance;
     private int containerUpdateDelay;
-    private boolean fakePlayer;
     private boolean fakingDeath;
 
     @Override
@@ -1215,14 +1214,6 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
             this.giveExp(this.newExp);
         }
         this.keepLevel = false;
-    }
-
-    public void setFakePlayer(boolean flag) {
-        this.fakePlayer = flag;
-    }
-
-    public boolean isFakePlayer() {
-        return fakePlayer;
     }
 
     public void setFakingDeath(boolean fakingDeath) {
