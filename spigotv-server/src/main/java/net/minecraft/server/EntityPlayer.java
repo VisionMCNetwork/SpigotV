@@ -1165,9 +1165,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
 
         pluginRainPositionPrevious = pluginRainPosition;
         if (weather == WeatherType.DOWNFALL) {
-            pluginRainPosition += 0.01;
+            pluginRainPosition += 0.01f;
         } else {
-            pluginRainPosition -= 0.01;
+            pluginRainPosition -= 0.01f;
         }
 
         pluginRainPosition = MathHelper.a(pluginRainPosition, 0.0F, 1.0F);
