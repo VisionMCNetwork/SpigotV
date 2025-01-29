@@ -48,7 +48,7 @@ class TimingData {
     long lagTotalTime = 0;
 
     int curTickCount = 0;
-    int curTickTotal = 0;
+    long curTickTotal = 0;
 
     TimingData(int id) {
         this.id = id;
