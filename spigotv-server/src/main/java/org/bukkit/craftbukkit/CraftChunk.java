@@ -1,10 +1,15 @@
 package org.bukkit.craftbukkit;
 
-import net.minecraft.server.*;
-import org.bukkit.craftbukkit.entity.CraftHumanEntity;
-import org.bukkit.entity.HumanEntity;
 import rip.visionmc.spigotv.chunk.CraftFakeMultiBlockChange;
 import rip.visionmc.spigotv.chunk.FakeMultiBlockChange;
+import net.minecraft.server.BiomeBase;
+import net.minecraft.server.BlockPosition;
+import net.minecraft.server.ChunkSection;
+import net.minecraft.server.EmptyChunk;
+import net.minecraft.server.IBlockData;
+import net.minecraft.server.PacketPlayOutMultiBlockChange;
+import net.minecraft.server.WorldChunkManager;
+import net.minecraft.server.WorldServer;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.Location;
@@ -15,10 +20,7 @@ import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.entity.Entity;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class CraftChunk implements Chunk {
 	private static final byte[] emptyData = new byte[2048];
@@ -167,12 +169,12 @@ public class CraftChunk implements Chunk {
 
 		for (int i = 0; i < 16; i++) {
 
-			for (Object obj : chunk.entitySlices[i].toArray()) {
-				if (!(obj instanceof net.minecraft.server.Entity)) {
-					continue;
+        			for (net.minecraft.server.Entity entity : chunk.entitySlices[i]) {
+			            if (entity == null) {
+				        continue;
 				}
 
-				entities[index++] = ((net.minecraft.server.Entity) obj).getBukkitEntity();
+				entities[index++] = entity.getBukkitEntity();
 			}
 		}
 
@@ -317,74 +319,22 @@ public class CraftChunk implements Chunk {
 		return new CraftChunkSnapshot(getX(), getZ(), world.getName(), world.getFullTime(), sectionBlockIDs, sectionBlockData, sectionSkyLights, sectionEmitLights, sectionEmpty, hmap, biome, biomeTemp, biomeRain);
 	}
 
+	// spigotv start
 	@Override
-	public rip.visionmc.spigotv.chunksnapshot.ChunkSnapshot takeSnapshot() {
-		net.minecraft.server.Chunk handle = getHandle();
-		rip.visionmc.spigotv.chunksnapshot.CraftChunkSnapshot snap = new rip.visionmc.spigotv.chunksnapshot.CraftChunkSnapshot();
+	public FakeMultiBlockChange createFakeBlockUpdate(final Location[] locations, final int[] ids, final int[] datas) {
+		PacketPlayOutMultiBlockChange packetPlayOutMultiBlockChange = new PacketPlayOutMultiBlockChange(locations.length, new short[locations.length], this.getHandle());
+		int index = 0;
+		for (PacketPlayOutMultiBlockChange.MultiBlockChangeInfo blockChangeInfo : packetPlayOutMultiBlockChange.getB()) {
+			blockChangeInfo.setC(net.minecraft.server.Block.getByCombinedId(ids[index]));
+			blockChangeInfo.setC(blockChangeInfo.c().getBlock().fromLegacyData(datas[index]));
 
-		// save chunk sections to snapshot
-		for (int i = 0; i < 16; i++) {
-			if (handle.getSections()[i] != null) {
-				snap.getSections()[i] = handle.getSections()[i].createSnapshot();
-			}
+			Location location = locations[index];
+			blockChangeInfo.setB((short) ((location.getBlockX() & 15) << 12 | (location.getBlockZ() & 15) << 8 | location.getBlockY()));
+
+			index++;
 		}
 
-		// save tile entities to snapshot
-		for (Map.Entry<BlockPosition, TileEntity> entry : handle.tileEntities.entrySet()) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			entry.getValue().b(nbt); // writeToNBT
-			snap.getTileEntities().add(nbt);
-		}
-		return (rip.visionmc.spigotv.chunksnapshot.ChunkSnapshot) snap;
+		return new CraftFakeMultiBlockChange(packetPlayOutMultiBlockChange);
 	}
-
-	@Override
-	public void restoreSnapshot(rip.visionmc.spigotv.chunksnapshot.ChunkSnapshot snapshot) {
-		rip.visionmc.spigotv.chunksnapshot.CraftChunkSnapshot snap = (rip.visionmc.spigotv.chunksnapshot.CraftChunkSnapshot) snapshot;
-		net.minecraft.server.Chunk handle = getHandle();
-
-		// add chunk sections from snapshot
-		for (int i = 0; i < 16; i++) {
-			if (snap.getSections()[i] == null) {
-				handle.getSections()[i] = null;
-			} else {
-				handle.getSections()[i] = new ChunkSection(i << 4, !worldServer.worldProvider.e());
-				handle.getSections()[i].restoreSnapshot(snap.getSections()[i]);
-			}
-		}
-
-		// clear tile entities currently in the chunk
-		for (TileEntity tileEntity : handle.tileEntities.values()) {
-			if (tileEntity instanceof IInventory) {
-				for (HumanEntity h : new ArrayList<>(((IInventory) tileEntity).getViewers())) {
-					if (h instanceof CraftHumanEntity) {
-						((CraftHumanEntity) h).getHandle().closeInventory();
-					}
-				}
-			}
-			worldServer.a(tileEntity);
-		}
-		handle.tileEntities.clear();
-
-		// add tile entities from snapshot
-		for (NBTTagCompound nbt : snap.getTileEntities()) {
-			// deserialize nbt to new tile entity instance
-			TileEntity tileEntity = TileEntity.c(nbt);
-			// TODO: might have to fix this
-			// move the tile entity into this chunk's space
-			tileEntity.setPosition(new BlockPosition(
-					(tileEntity.getPosition().getX() & 15) | handle.locX << 4,
-					tileEntity.getPosition().getY(),
-					(tileEntity.getPosition().getZ() & 15) | handle.locX << 4
-			));
-
-			// add it
-			handle.a(tileEntity);
-		}
-
-		handle.mustSave = true; // needs saving flag
-		worldServer.getPlayerChunkMap().resend(x, z);
-	}
-
-
+	// spigotv end
 }
