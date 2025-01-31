@@ -49,6 +49,10 @@ public class PlaySoundCommand extends VanillaCommand {
             minimumVolume = getDouble(sender, args[7], 0.0D, 1.0D);
         case 7:
             pitch = getDouble(sender, args[6], 0.0D, 2.0D);
+            if (pitch < 0.0D || pitch > 2.0D) {
+                sender.sendMessage(ChatColor.RED + "Invalid pitch value. It must be between 0.0 and 2.0.");
+                return false;
+            }
         case 6:
             volume = getDouble(sender, args[5], 0.0D, Float.MAX_VALUE);
         case 5:
