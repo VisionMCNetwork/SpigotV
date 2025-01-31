@@ -7,6 +7,9 @@ public final class NumberConversions {
     private NumberConversions() {}
 
     public static int floor(double num) {
+        if (num < Integer.MIN_VALUE || num > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Value out of range for int: " + num);
+        }
         final int floor = (int) num;
         return floor == num ? floor : floor - (int) (Double.doubleToRawLongBits(num) >>> 63);
     }
