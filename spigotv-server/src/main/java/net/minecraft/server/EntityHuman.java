@@ -57,6 +57,7 @@ public abstract class EntityHuman extends EntityLiving {
     private boolean bI = false;
     public EntityFishingHook hookedFish;
     public boolean affectsSpawning = true; // PaperSpigot
+    public KnockbackProfile profile = this.getKnockbackProfile() == null ? SpigotV.INSTANCE.getConfig().getCurrentKb() : this.getKnockbackProfile();
 
     // CraftBukkit start
     public boolean fauxSleeping;
@@ -1011,7 +1012,6 @@ public abstract class EntityHuman extends EntityLiving {
                 double d2 = entity.motZ;
                 boolean damaged = entity.damageEntity(DamageSource.playerAttack(this), f);
                 if (damaged) {
-		    KnockbackProfile profile = this.getKnockbackProfile() == null ? SpigotV.INSTANCE.getConfig().getCurrentKb() : this.getKnockbackProfile();
                     entity.g(-MathHelper.sin(this.yaw * (float)Math.PI / 180.0f) * (float)i * 0.5f, 0.1, MathHelper.cos(this.yaw * (float)Math.PI / 180.0f) * (float)i * 0.5f);
                     this.setSprinting(false);
                     if (entity instanceof EntityPlayer && entity.velocityChanged) {
