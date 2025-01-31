@@ -53,6 +53,10 @@ public class PlaySoundCommand extends VanillaCommand {
                 sender.sendMessage(ChatColor.RED + "Invalid pitch value. It must be between 0.0 and 2.0.");
                 return false;
             }
+            if (pitch > Float.MAX_VALUE) {
+                sender.sendMessage(ChatColor.RED + "Pitch value is too large to be represented as a float.");
+                return false;
+            }
         case 6:
             volume = getDouble(sender, args[5], 0.0D, Float.MAX_VALUE);
         case 5:
