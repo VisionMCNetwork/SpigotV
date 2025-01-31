@@ -105,6 +105,7 @@ public abstract class EntityLiving extends Entity {
     ArrayList<org.bukkit.inventory.ItemStack> drops = null;
     private boolean isTickingEffects = false;
     private List<Object> effectsToProcess = Lists.newArrayList();
+    public KnockbackProfile profile = this.getKnockbackProfile() == null ? SpigotV.INSTANCE.getConfig().getCurrentKb() : this.getKnockbackProfile();
 
     public void inactiveTick() {
         super.inactiveTick();
@@ -914,7 +915,6 @@ public abstract class EntityLiving extends Entity {
     }
 
     private double calculateModifiedRange(double distance) {
-	KnockbackProfile profile = this.getKnockbackProfile() == null ? SpigotV.INSTANCE.getConfig().getCurrentKb() : this.getKnockbackProfile();
         if (distance <= profile.getStartRange()) {
             return 0.0;
         }
@@ -947,15 +947,12 @@ public abstract class EntityLiving extends Entity {
 
     public void a(Entity entity, float f, double d0, double d1, Entity opponent) {
         this.ai = true;
-        KnockbackProfile profile = this.getKnockbackProfile() == null ? SpigotV.INSTANCE.getConfig().getCurrentKb() : this.getKnockbackProfile();
-
-        double player1X = entity.getBukkitEntity().getLocation().getX();
+	double player1X = entity.getBukkitEntity().getLocation().getX();
         double player1Z = entity.getBukkitEntity().getLocation().getZ();
-        double player1Y = entity.getBukkitEntity().getLocation().getY();
         double player2X = opponent.getBukkitEntity().getLocation().getX();
         double player2Z = opponent.getBukkitEntity().getLocation().getZ();
 
-        double distance = this.getDistanceBetweenEntities(this.getClosestEntity(entity, 6.0), entity);
+        double distance = this.getDistanceBetweenEntities(this.getClosestEntity(entity, 4.0), entity);
         double rangeReduction = this.calculateModifiedRange(distance);
         double knockbackHorizontal = profile.getHorizontal();
         double knockbackVertical = profile.getVertical();
