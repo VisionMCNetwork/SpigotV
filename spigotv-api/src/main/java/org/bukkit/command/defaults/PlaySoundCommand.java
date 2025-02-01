@@ -59,8 +59,8 @@ public class PlaySoundCommand extends VanillaCommand {
             }
         case 6:
             volume = getDouble(sender, args[5], 0.0D, Float.MAX_VALUE);
-            if (volume > Float.MAX_VALUE) {
-                sender.sendMessage(ChatColor.RED + "Volume value is too large to be represented as a float.");
+            if (volume < Float.MIN_VALUE || volume > Float.MAX_VALUE) {
+                sender.sendMessage(ChatColor.RED + "Volume value is out of range for a float.");
                 return false;
             }
         case 5:
