@@ -42,7 +42,7 @@ import com.avaje.ebean.enhance.asm.Type;
 import rip.visionmc.spigotv.asm.ASMEventBus;
 import rip.visionmc.spigotv.asm.ASMEventHandler;
 import rip.visionmc.spigotv.asm.CustomClassLoader;
-import rip.visionmc.spigotv.util.JavaUtil
+import rip.visionmc.spigotv.util.JavaUtil;
 
 /**
  * Handles all plugin management from the Server
