@@ -23,13 +23,9 @@
 [GoatSpigot-????] Custom-tps-command.patch
 
 [KewlSpigot-????] Add-potion-and-inventory-events.patch
-[KewlSpigot-????] Add-separate-friction-values.patch
 [KewlSpigot-????] Add-configurable-potions.patch
-[KewlSpigot-????] Add-chunk-snapshot-api.patch
 [KewlSpigot-????] Optimize-imports.patch
 [KewlSpigot-????] Remove-the-site-reporting-plugin-packets.patch
-
-[FoxSpigot-????] Improve-hit-registration.patch
 
 [PandaSpigot-0010] Avoid blocking on network manager creation
 [PandaSpigot-0021] Set-cap-on-JDK-per-thread-native-byte-buffer-cache.patch
@@ -40,7 +36,6 @@
 [PandaSpigot-0034] Cache-user-authenticator-threads.patch
 [PandaSpigot-0035] Optimize-Network-Queue.patch
 [PandaSpigot-0038] Optimize-VarInt-reading-and-writing.patch
-
 
 [KigPaper-0128] Fix-Entity-and-Command-Block-memory-leaks.patch
 [KigPaper-0129] Fix-more-EnchantmentManager-leaks.patch
