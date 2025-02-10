@@ -19,14 +19,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.event.*;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -37,10 +34,20 @@ import org.github.paperspigot.event.ServerExceptionEvent;
 import org.github.paperspigot.exception.ServerEventException;
 import org.github.paperspigot.exception.ServerPluginEnableDisableException;
 
+import com.avaje.ebean.enhance.asm.ClassWriter;
+import com.avaje.ebean.enhance.asm.MethodVisitor;
+import com.avaje.ebean.enhance.asm.Opcodes;
+import com.avaje.ebean.enhance.asm.Type;
+
+import rip.visionmc.spigotv.asm.ASMEventBus;
+import rip.visionmc.spigotv.asm.ASMEventHandler;
+import rip.visionmc.spigotv.asm.CustomClassLoader;
+import rip.visionmc.spigotv.util.JavaUtil
+
 /**
  * Handles all plugin management from the Server
  */
-public final class SimplePluginManager implements PluginManager {
+public class SimplePluginManager implements PluginManager {
     private final Server server;
     private final Map<Pattern, PluginLoader> fileAssociations = new HashMap<Pattern, PluginLoader>();
     private final List<Plugin> plugins = new ArrayList<Plugin>();
@@ -52,8 +59,10 @@ public final class SimplePluginManager implements PluginManager {
     private final Map<String, Map<Permissible, Boolean>> permSubs = new HashMap<String, Map<Permissible, Boolean>>();
     private final Map<Boolean, Map<Permissible, Boolean>> defSubs = new HashMap<Boolean, Map<Permissible, Boolean>>();
     private boolean useTimings = false;
+    private ASMEventBus eventBus;
 
     public SimplePluginManager(Server instance, SimpleCommandMap commandMap) {
+        this.eventBus = new ASMEventBus();
         server = instance;
         this.commandMap = commandMap;
 
@@ -488,6 +497,8 @@ public final class SimplePluginManager implements PluginManager {
      *
      * @param event Event details
      */
+
+    @Override
     public void callEvent(Event event) {
         if (event.isAsynchronous()) {
             if (Thread.holdsLock(this)) {
@@ -496,10 +507,10 @@ public final class SimplePluginManager implements PluginManager {
             if (server.isPrimaryThread()) {
                 throw new IllegalStateException(event.getEventName() + " cannot be triggered asynchronously from primary server thread.");
             }
-            fireEvent(event);
+            eventBus.dispatchEvent(event);
         } else {
             synchronized (this) {
-                fireEvent(event);
+                eventBus.dispatchEvent(event);
             }
         }
     }
@@ -540,15 +551,18 @@ public final class SimplePluginManager implements PluginManager {
         }
     }
 
+    @Override
     public void registerEvents(Listener listener, Plugin plugin) {
         if (!plugin.isEnabled()) {
             throw new IllegalPluginAccessException("Plugin attempted to register " + listener + " while not enabled");
         }
-
-        for (Map.Entry<Class<? extends Event>, Set<RegisteredListener>> entry : plugin.getPluginLoader().createRegisteredListeners(listener, plugin).entrySet()) {
-            getEventListeners(getRegistrationClass(entry.getKey())).registerAll(entry.getValue());
+        for (Method method : listener.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(EventHandler.class)) {
+                Class<? extends Event> eventType = (Class<? extends Event>) method.getParameterTypes()[0];
+                ASMEventHandler handler = eventBus.generateHandler(listener, method, eventType);
+                eventBus.registerListener(listener, eventType, handler);
+            }
         }
-
     }
 
     public void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin) {
