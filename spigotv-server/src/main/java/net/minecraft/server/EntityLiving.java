@@ -1294,6 +1294,21 @@ public abstract class EntityLiving extends Entity {
 
     public abstract void setEquipment(int i, ItemStack itemstack);
 
+    public void setSprinting(boolean flag) {
+        super.setSprinting(flag);
+
+        AttributeInstance attributeinstance = this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED);
+
+        if (attributeinstance.a(EntityLiving.a) != null) {
+            attributeinstance.c(EntityLiving.b);
+        }
+
+        if (flag) {
+            attributeinstance.b(EntityLiving.b);
+        }
+
+    }
+
     public abstract ItemStack[] getEquipment();
 
     protected float bB() {
