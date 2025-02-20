@@ -981,10 +981,6 @@ public abstract class EntityHuman extends EntityLiving {
 
             int i = b0 + EnchantmentManager.a(this);
 
-            if (this.isSprinting()) {
-                ++i;
-            }
-
             if (f > 0.0F || f1 > 0.0F) {
                 boolean flag = !world.paperSpigotConfig.disablePlayerCrits && this.fallDistance > 0.0F && !this.onGround && !this.k_() && !this.V() && !this.hasEffect(MobEffectList.BLINDNESS) && this.vehicle == null && entity instanceof EntityLiving; // PaperSpigot
 
@@ -1013,7 +1009,6 @@ public abstract class EntityHuman extends EntityLiving {
                 boolean damaged = entity.damageEntity(DamageSource.playerAttack(this), f);
                 if (damaged) {
                     entity.g(-MathHelper.sin(this.yaw * (float)Math.PI / 180.0f) * (float)i * 0.5f, 0.1, MathHelper.cos(this.yaw * (float)Math.PI / 180.0f) * (float)i * 0.5f);
-                    this.setSprinting(false);
                     if (entity instanceof EntityPlayer && entity.velocityChanged) {
                         Player player = (Player)((Object)entity.getBukkitEntity());
 			Vector velocity = new Vector(d0, d1, d2);
