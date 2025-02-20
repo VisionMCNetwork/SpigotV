@@ -127,7 +127,7 @@ public abstract class EntityLiving extends Entity {
         this.setPosition(this.locX, this.locY, this.locZ);
 
         this.aG = (float) Math.random() * 12398.0F;
-        this.yaw = (float) (Math.random() * (double) Math.PI() * 2.0D);
+        this.yaw = (float) (Math.random() * Math.PI * 2.0D);
         this.aK = this.yaw;
         this.S = 0.6F;
     }
@@ -821,7 +821,7 @@ public abstract class EntityLiving extends Entity {
                             d0 = (Math.random() - Math.random()) * 0.01D;
                         }
 
-                        this.aw = (float) (MathHelper.b(d1, d0) * 180.0D / (double) Math.PI() - (double) this.yaw);
+                        this.aw = (float) (MathHelper.b(d1, d0) * 180.0D / Math.PI - (double) this.yaw);
                         this.a(entity, f, d0, d1, this.killer);
                     } else {
                         this.aw = (float) ((int) (Math.random() * 2.0D) * 180);
@@ -857,13 +857,13 @@ public abstract class EntityLiving extends Entity {
         for (int i = 0; i < 5; ++i) {
             Vec3D vec3d = new Vec3D(((double) this.random.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
 
-            vec3d = vec3d.a(-this.pitch * (float) Math.PI() / 180.0F);
-            vec3d = vec3d.b(-this.yaw * (float) Math.PI() / 180.0F);
+            vec3d = vec3d.a(-this.pitch * (float) Math.PI / 180.0F);
+            vec3d = vec3d.b(-this.yaw * (float) Math.PI / 180.0F);
             double d0 = (double) (-this.random.nextFloat()) * 0.6D - 0.3D;
             Vec3D vec3d1 = new Vec3D(((double) this.random.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
 
-            vec3d1 = vec3d1.a(-this.pitch * (float) Math.PI() / 180.0F);
-            vec3d1 = vec3d1.b(-this.yaw * (float) Math.PI() / 180.0F);
+            vec3d1 = vec3d1.a(-this.pitch * (float) Math.PI / 180.0F);
+            vec3d1 = vec3d1.b(-this.yaw * (float) Math.PI / 180.0F);
             vec3d1 = vec3d1.add(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ);
             this.world.addParticle(EnumParticle.ITEM_CRACK, vec3d1.a, vec3d1.b, vec3d1.c, vec3d.a, vec3d.b + 0.05D, vec3d.c, new int[]{Item.getId(itemstack.getItem())});
         }
@@ -1555,7 +1555,7 @@ public abstract class EntityLiving extends Entity {
             f3 = 1.0F;
             f2 = (float) Math.sqrt((double) f) * 3.0F;
             // CraftBukkit - Math -> TrigMath
-            f1 = (float) org.bukkit.craftbukkit.TrigMath.atan2(d1, d0) * 180.0F / (float) Math.PI() - 90.0F;
+            f1 = (float) org.bukkit.craftbukkit.TrigMath.atan2(d1, d0) * 180.0F / (float) Math.PI - 90.0F;
         }
 
         if (this.az > 0.0F) {
