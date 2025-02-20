@@ -31,7 +31,7 @@ import java.util.*;
 public abstract class EntityLiving extends Entity {
 
     private static final UUID a = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
-    private static final AttributeModifier b = (new AttributeModifier(EntityLiving.a, "Sprinting speed boost", 0.00D, 2)).a(false);
+    private static final AttributeModifier b = (new AttributeModifier(EntityLiving.a, "Sprinting speed boost", 0.30D, 2)).a(false);
 
     // SpigotV start
     private KnockbackProfile knockbackProfile;
