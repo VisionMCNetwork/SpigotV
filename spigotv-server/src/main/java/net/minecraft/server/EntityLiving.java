@@ -900,7 +900,7 @@ public abstract class EntityLiving extends Entity {
 
     private double calculateModifiedRange(double distance) {
         if (distance <= profile.getStartRange()) {
-            return 3.0;
+            return 0.0;
         }
         double knockbackRangeFactor = profile.getRangeFactor();
         double maxRangeReduction = profile.getMaxRange();
