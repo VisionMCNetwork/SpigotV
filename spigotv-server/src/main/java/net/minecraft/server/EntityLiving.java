@@ -5,17 +5,20 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import java.util.*;
 import org.bukkit.Bukkit;
-import org.bukkit.util.Vector;
-import org.bukkit.entity.Player;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.craftbukkit.event.CraftEventFactory;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
+import org.bukkit.util.Vector;
+import org.spigotmc.AsyncCatcher;
+import org.spigotmc.event.entity.EntityDismountEvent;
 import rip.visionmc.spigotv.SpigotV;
 import rip.visionmc.spigotv.event.potion.PotionEffectAddEvent;
 import rip.visionmc.spigotv.event.potion.PotionEffectExpireEvent;
@@ -23,19 +26,12 @@ import rip.visionmc.spigotv.event.potion.PotionEffectExtendEvent;
 import rip.visionmc.spigotv.event.potion.PotionEffectRemoveEvent;
 import rip.visionmc.spigotv.knockback.KnockbackProfile;
 import rip.visionmc.spigotv.util.CraftPotionUtil;
-import org.spigotmc.AsyncCatcher;
-import org.spigotmc.event.entity.EntityDismountEvent;
-
-import java.util.*;
 
 public abstract class EntityLiving extends Entity {
-
     private static final UUID a = UUID.fromString("662A6B8D-DA3E-4C1C-8813-96EA6097278D");
-    private static final AttributeModifier b = (new AttributeModifier(EntityLiving.a, "Sprinting speed boost", 0.30D, 2)).a(false);
+    private static final AttributeModifier b = (new AttributeModifier(EntityLiving.a, "Sprinting speed boost", 0.30000001192092896D, 2)).a(false);
 
     // SpigotV start
-    private KnockbackProfile knockbackProfile;
-
     public KnockbackProfile getKnockbackProfile() {
         return knockbackProfile;
     }
@@ -165,9 +161,9 @@ public abstract class EntityLiving extends Entity {
                 int i = (int) (150.0D * d1);
 
                 if (this instanceof EntityPlayer) {
-                    ((WorldServer) this.world).sendParticles((EntityPlayer) this, EnumParticle.BLOCK_DUST, false, this.locX, this.locY, this.locZ, i, 0.0D, 0.0D, 0.0D, 0.15000000596046448D, new int[]{Block.getCombinedId(iblockdata)});
+                    ((WorldServer) this.world).sendParticles((EntityPlayer) this, EnumParticle.BLOCK_DUST, false, this.locX, this.locY, this.locZ, i, 0.0D, 0.0D, 0.0D, 0.15000000596046448D, new int[] {Block.getCombinedId(iblockdata)});
                 } else {
-                    ((WorldServer) this.world).a(EnumParticle.BLOCK_DUST, this.locX, this.locY, this.locZ, i, 0.0D, 0.0D, 0.0D, 0.15000000596046448D, new int[]{Block.getCombinedId(iblockdata)});
+                    ((WorldServer) this.world).a(EnumParticle.BLOCK_DUST, this.locX, this.locY, this.locZ, i, 0.0D, 0.0D, 0.0D, 0.15000000596046448D, new int[] {Block.getCombinedId(iblockdata)});
                 }
             }
         }
@@ -320,7 +316,6 @@ public abstract class EntityLiving extends Entity {
                 this.world.addParticle(EnumParticle.EXPLOSION_NORMAL, this.locX + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, this.locY + (double) (this.random.nextFloat() * this.length), this.locZ + (double) (this.random.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2, new int[0]);
             }
         }
-
     }
 
     protected boolean ba() {
@@ -424,7 +419,6 @@ public abstract class EntityLiving extends Entity {
 
             nbttagcompound.set("ActiveEffects", nbttaglist);
         }
-
     }
 
     @Override
@@ -487,17 +481,15 @@ public abstract class EntityLiving extends Entity {
                 if (this.world.isClientSide) {
                     continue;
                 }
-                final PotionEffectExpireEvent event = new PotionEffectExpireEvent((LivingEntity)this.getBukkitEntity(), CraftPotionUtil.toBukkit(mobeffect));
+                final PotionEffectExpireEvent event = new PotionEffectExpireEvent((LivingEntity) this.getBukkitEntity(), CraftPotionUtil.toBukkit(mobeffect));
                 this.world.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
                     CraftPotionUtil.extendDuration(mobeffect, event.getDuration());
-                }
-                else {
+                } else {
                     iterator.remove();
                     this.b(mobeffect);
                 }
-            }
-            else {
+            } else {
                 if (mobeffect.getDuration() % 600 != 0) {
                     continue;
                 }
@@ -507,10 +499,9 @@ public abstract class EntityLiving extends Entity {
         this.isTickingEffects = false;
         for (final Object e : this.effectsToProcess) {
             if (e instanceof MobEffect) {
-                this.addEffect((MobEffect)e);
-            }
-            else {
-                this.removeEffect((int)e);
+                this.addEffect((MobEffect) e);
+            } else {
+                this.removeEffect((int) e);
             }
         }
         if (this.updateEffects) {
@@ -525,8 +516,7 @@ public abstract class EntityLiving extends Entity {
             boolean flag2 = false;
             if (!this.isInvisible()) {
                 flag2 = this.random.nextBoolean();
-            }
-            else {
+            } else {
                 flag2 = (this.random.nextInt(15) == 0);
             }
             if (flag) {
@@ -552,7 +542,6 @@ public abstract class EntityLiving extends Entity {
             this.datawatcher.watch(7, Integer.valueOf(i));
             this.setInvisible(this.hasEffect(MobEffectList.INVISIBILITY.id));
         }
-
     }
 
     protected void bj() {
@@ -565,7 +554,8 @@ public abstract class EntityLiving extends Entity {
 
         while (iterator.hasNext()) {
             Integer integer = (Integer) iterator.next();
-            if(!this.effects.keySet().contains(integer)) continue;
+            if (!this.effects.keySet().contains(integer))
+                continue;
             MobEffect mobeffect = (MobEffect) this.effects.get(integer);
 
             if (!this.world.isClientSide) {
@@ -573,7 +563,6 @@ public abstract class EntityLiving extends Entity {
                 this.b(mobeffect);
             }
         }
-
     }
 
     public Collection<MobEffect> getEffects() {
@@ -602,16 +591,15 @@ public abstract class EntityLiving extends Entity {
         if (this.d(mobeffect)) {
             final MobEffect currentEffect = this.effects.get(mobeffect.getEffectId());
             if (currentEffect == null) {
-                final PotionEffectAddEvent event = new PotionEffectAddEvent((LivingEntity)this.getBukkitEntity(), CraftPotionUtil.toBukkit(mobeffect));
+                final PotionEffectAddEvent event = new PotionEffectAddEvent((LivingEntity) this.getBukkitEntity(), CraftPotionUtil.toBukkit(mobeffect));
                 this.world.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
                     return;
                 }
                 this.effects.put(mobeffect.getEffectId(), mobeffect);
                 this.a(mobeffect);
-            }
-            else {
-                final PotionEffectExtendEvent event2 = new PotionEffectExtendEvent((LivingEntity)this.getBukkitEntity(), CraftPotionUtil.toBukkit(mobeffect), CraftPotionUtil.toBukkit(mobeffect));
+            } else {
+                final PotionEffectExtendEvent event2 = new PotionEffectExtendEvent((LivingEntity) this.getBukkitEntity(), CraftPotionUtil.toBukkit(mobeffect), CraftPotionUtil.toBukkit(mobeffect));
                 this.world.getServer().getPluginManager().callEvent(event2);
                 if (event2.isCancelled()) {
                     return;
@@ -622,8 +610,7 @@ public abstract class EntityLiving extends Entity {
             if (this.effects.containsKey(mobeffect.getEffectId())) {
                 this.effects.get(mobeffect.getEffectId()).a(mobeffect);
                 this.a(this.effects.get(mobeffect.getEffectId()), true);
-            }
-            else {
+            } else {
                 this.effects.put(mobeffect.getEffectId(), mobeffect);
                 this.a(mobeffect);
             }
@@ -653,7 +640,7 @@ public abstract class EntityLiving extends Entity {
         }
         final MobEffect mobeffect = this.effects.remove(i);
         if (mobeffect != null) {
-            final PotionEffectRemoveEvent event = new PotionEffectRemoveEvent((LivingEntity)this.getBukkitEntity(), CraftPotionUtil.toBukkit(mobeffect));
+            final PotionEffectRemoveEvent event = new PotionEffectRemoveEvent((LivingEntity) this.getBukkitEntity(), CraftPotionUtil.toBukkit(mobeffect));
             this.world.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 return;
@@ -667,7 +654,6 @@ public abstract class EntityLiving extends Entity {
         if (!this.world.isClientSide) {
             MobEffectList.byId[mobeffect.getEffectId()].b(this, this.getAttributeMap(), mobeffect.getAmplifier());
         }
-
     }
 
     protected void a(MobEffect mobeffect, boolean flag) {
@@ -676,7 +662,6 @@ public abstract class EntityLiving extends Entity {
             MobEffectList.byId[mobeffect.getEffectId()].a(this, this.getAttributeMap(), mobeffect.getAmplifier());
             MobEffectList.byId[mobeffect.getEffectId()].b(this, this.getAttributeMap(), mobeffect.getAmplifier());
         }
-
     }
 
     protected void b(MobEffect mobeffect) {
@@ -684,7 +669,6 @@ public abstract class EntityLiving extends Entity {
         if (!this.world.isClientSide) {
             MobEffectList.byId[mobeffect.getEffectId()].a(this, this.getAttributeMap(), mobeffect.getAmplifier());
         }
-
     }
 
     // CraftBukkit start - Delegate so we can handle providing a reason for health being regained
@@ -704,7 +688,6 @@ public abstract class EntityLiving extends Entity {
             }
             // CraftBukkit end
         }
-
     }
 
     public final float getHealth() {
@@ -828,7 +811,8 @@ public abstract class EntityLiving extends Entity {
                     }
                 }
 
-                if (knockbackCancelled) this.world.broadcastEntityEffect(this, (byte) 2); // PaperSpigot
+                if (knockbackCancelled)
+                    this.world.broadcastEntityEffect(this, (byte) 2); // PaperSpigot
 
                 String s;
 
@@ -865,9 +849,8 @@ public abstract class EntityLiving extends Entity {
             vec3d1 = vec3d1.a(-this.pitch * (float) Math.PI / 180.0F);
             vec3d1 = vec3d1.b(-this.yaw * (float) Math.PI / 180.0F);
             vec3d1 = vec3d1.add(this.locX, this.locY + (double) this.getHeadHeight(), this.locZ);
-            this.world.addParticle(EnumParticle.ITEM_CRACK, vec3d1.a, vec3d1.b, vec3d1.c, vec3d.a, vec3d.b + 0.05D, vec3d.c, new int[]{Item.getId(itemstack.getItem())});
+            this.world.addParticle(EnumParticle.ITEM_CRACK, vec3d1.a, vec3d1.b, vec3d1.c, vec3d.a, vec3d.b + 0.05D, vec3d.c, new int[] {Item.getId(itemstack.getItem())});
         }
-
     }
 
     public void die(DamageSource damagesource) {
@@ -911,8 +894,7 @@ public abstract class EntityLiving extends Entity {
         this.world.broadcastEntityEffect(this, (byte) 3);
     }
 
-    protected void dropEquipment(boolean flag, int i) {
-    }
+    protected void dropEquipment(boolean flag, int i) {}
 
     private double calculateModifiedRange(double distance) {
         if (distance <= profile.getStartRange()) {
@@ -935,10 +917,12 @@ public abstract class EntityLiving extends Entity {
         double dist = range;
         EntityPlayer target = null;
         for (org.bukkit.entity.Entity e : player.getBukkitEntity().getNearbyEntities(player.locX, player.locY, player.locZ)) {
-            if (!(e instanceof Player)) continue;
-            EntityPlayer livingBase = ((CraftPlayer)e).getHandle();
+            if (!(e instanceof Player))
+                continue;
+            EntityPlayer livingBase = ((CraftPlayer) e).getHandle();
             double currentDist = player.getBukkitEntity().getLocation().distance(livingBase.bukkitEntity.getLocation());
-            if (!(currentDist <= dist)) continue;
+            if (!(currentDist <= dist))
+                continue;
             dist = currentDist;
             target = livingBase;
         }
@@ -947,7 +931,7 @@ public abstract class EntityLiving extends Entity {
 
     public void a(Entity entity, float f, double d0, double d1, Entity opponent) {
         this.ai = true;
-	double player1X = entity.getBukkitEntity().getLocation().getX();
+        double player1X = entity.getBukkitEntity().getLocation().getX();
         double player1Z = entity.getBukkitEntity().getLocation().getZ();
         double player2X = opponent.getBukkitEntity().getLocation().getX();
         double player2Z = opponent.getBukkitEntity().getLocation().getZ();
@@ -956,22 +940,22 @@ public abstract class EntityLiving extends Entity {
         double rangeReduction = this.calculateModifiedRange(distance);
         double knockbackHorizontal = profile.getHorizontal();
         double knockbackVertical = profile.getVertical();
-        double frictionHorizontal = 2.0 - (1.0 - knockbackHorizontal);
-        double frictionVertical = 2.0 - (1.0 - knockbackVertical);
+        double reductionHorizontal = 2.0 - (1.0 - knockbackHorizontal);
+        double reductionVertical = 2.0 - (1.0 - knockbackVertical);
 
-	float f1 = MathHelper.sqrt(d0 * d0 + d1 * d1);
-	float f2 = (float)(0.4 * (1.0 - 0.4 * (1.0 - knockbackHorizontal)));
+        float f1 = MathHelper.sqrt(d0 * d0 + d1 * d1);
+        float f2 = (float) (0.4 * (1.0 - 0.4 * (1.0 - knockbackHorizontal)));
 
-        this.motX /= frictionHorizontal;
-	this.motY /= frictionVertical;
-        this.motZ /= frictionHorizontal;
+        this.motX /= reductionHorizontal;
+        this.motY /= reductionVertical;
+        this.motZ /= reductionHorizontal;
 
-	this.motY = knockbackVertical;
+        this.motY = knockbackVertical;
 
-        this.motX -= d0 / (double)f1 * ((double)f2 - rangeReduction);
-        this.motZ -= d1 / (double)f1 * ((double)f2 - rangeReduction);
+        this.motX -= d0 / (double) f1 * ((double) f2 - rangeReduction);
+        this.motZ -= d1 / (double) f1 * ((double) f2 - rangeReduction);
 
-        if (this.motY > (double)0.4f) {
+        if (this.motY > (double) 0.4f) {
             this.motY = 0.4f;
         }
     }
@@ -1026,7 +1010,6 @@ public abstract class EntityLiving extends Entity {
                 this.makeSound(block_stepsound.getStepSound(), block_stepsound.getVolume1() * 0.5F, block_stepsound.getVolume2() * 0.75F);
             }
         }
-
     }
 
     protected String n(int i) {
@@ -1249,7 +1232,6 @@ public abstract class EntityLiving extends Entity {
                 ((WorldServer) this.world).getTracker().a((Entity) this, (Packet) (new PacketPlayOutAnimation(this, 0)));
             }
         }
-
     }
 
     protected void O() {
@@ -1306,7 +1288,6 @@ public abstract class EntityLiving extends Entity {
         if (flag) {
             attributeinstance.b(EntityLiving.b);
         }
-
     }
 
     public abstract ItemStack[] getEquipment();
@@ -1760,7 +1741,6 @@ public abstract class EntityLiving extends Entity {
             }
             numCollisions = 0; // Spigot
         }
-
     }
 
     protected void s(Entity entity) {
@@ -1783,7 +1763,8 @@ public abstract class EntityLiving extends Entity {
             // PaperSpigot start - make dismountEvent cancellable
             EntityDismountEvent dismountEvent = new EntityDismountEvent(this.getBukkitEntity(), this.vehicle.getBukkitEntity()); // Spigot
             Bukkit.getPluginManager().callEvent(dismountEvent);
-            if (dismountEvent.isCancelled()) return;
+            if (dismountEvent.isCancelled())
+                return;
             // PaperSpigot end
 
             if (!this.world.isClientSide) {
