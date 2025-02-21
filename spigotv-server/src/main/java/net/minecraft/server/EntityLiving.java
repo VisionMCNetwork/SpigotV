@@ -32,6 +32,8 @@ public abstract class EntityLiving extends Entity {
     private static final AttributeModifier b = (new AttributeModifier(EntityLiving.a, "Sprinting speed boost", 0.30000001192092896D, 2)).a(false);
 
     // SpigotV start
+    private KnockbackProfile knockbackProfile;
+
     public KnockbackProfile getKnockbackProfile() {
         return knockbackProfile;
     }
