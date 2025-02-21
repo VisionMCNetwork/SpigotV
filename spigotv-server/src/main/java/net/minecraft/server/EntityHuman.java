@@ -1012,8 +1012,7 @@ public abstract class EntityHuman extends EntityLiving {
                 double d2 = entity.motZ;
                 boolean damaged = entity.damageEntity(DamageSource.playerAttack(this), f);
                 if (damaged) {
-                    entity.g(-MathHelper.sin(this.yaw * (float)Math.PI / 180.0f) * (float)i * 0.5f, 0.1, MathHelper.cos(this.yaw * (float)Math.PI / 180.0f) * (float)i * 0.5f);
-		    this.setSprinting(false);
+                    entity.g(-MathHelper.sin(this.yaw * (float) Math.PI / 180.0f) * (float) i * 0.5f, 0.1, MathHelper.cos(this.yaw * (float) Math.PI / 180.0f) * (float) i * 0.5f);
                     if (entity instanceof EntityPlayer && entity.velocityChanged) {
                         Player player = (Player)((Object)entity.getBukkitEntity());
 			Vector velocity = new Vector(d0, d1, d2);
