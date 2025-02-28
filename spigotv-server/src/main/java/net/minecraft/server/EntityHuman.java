@@ -13,6 +13,8 @@ import org.bukkit.util.Vector;
 import rip.visionmc.spigotv.SpigotV;
 import rip.visionmc.spigotv.knockback.KnockbackProfile;
 
+import net.minecraft.server.EntityLiving;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -57,7 +59,6 @@ public abstract class EntityHuman extends EntityLiving {
     private boolean bI = false;
     public EntityFishingHook hookedFish;
     public boolean affectsSpawning = true; // PaperSpigot
-    public KnockbackProfile profile = this.getKnockbackProfile() == null ? SpigotV.INSTANCE.getConfig().getCurrentKb() : this.getKnockbackProfile();
 
     // CraftBukkit start
     public boolean fauxSleeping;
