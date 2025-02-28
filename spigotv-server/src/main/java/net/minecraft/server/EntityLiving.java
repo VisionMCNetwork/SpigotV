@@ -902,9 +902,11 @@ public abstract class EntityLiving extends Entity {
         if (distance <= profile.getStartRange()) {
             return 0.0;
         }
+
         double knockbackRangeFactor = profile.getRangeFactor();
         double maxRangeReduction = profile.getMaxRange();
         double modifiedRange = knockbackRangeFactor * (distance - maxRangeReduction);
+
         return Math.min(modifiedRange, profile.getMinRange());
     }
 
@@ -912,6 +914,7 @@ public abstract class EntityLiving extends Entity {
         if (entity1 != null && entity2 != null) {
             return entity1.getBukkitEntity().getLocation().distance(entity2.getBukkitEntity().getLocation());
         }
+
         return -1.0;
     }
 
@@ -933,26 +936,21 @@ public abstract class EntityLiving extends Entity {
 
     public void a(Entity entity, float f, double d0, double d1, Entity opponent) {
         this.ai = true;
-        double player1X = entity.getBukkitEntity().getLocation().getX();
-        double player1Z = entity.getBukkitEntity().getLocation().getZ();
-        double player2X = opponent.getBukkitEntity().getLocation().getX();
-        double player2Z = opponent.getBukkitEntity().getLocation().getZ();
 
         double distance = this.getDistanceBetweenEntities(this.getClosestEntity(entity, 4.0), entity);
         double rangeReduction = this.calculateModifiedRange(distance);
-        double knockbackHorizontal = profile.getHorizontal();
-        double knockbackVertical = profile.getVertical();
-        double reductionHorizontal = 2.0 - (1.0 - knockbackHorizontal);
-        double reductionVertical = 2.0 - (1.0 - knockbackVertical);
+
+        double reductionHorizontal = 2.0 - (1.0 - profile.getHorizontal());
+        double reductionVertical = 2.0 - (1.0 - profile.getVertical());
 
         float f1 = MathHelper.sqrt(d0 * d0 + d1 * d1);
-        float f2 = (float) (0.4 * (1.0 - 0.4 * (1.0 - knockbackHorizontal)));
+        float f2 = (float) (0.4 * (1.0 - 0.4 * (1.0 - profile.getHorizontal())));
 
         this.motX /= reductionHorizontal;
         this.motY /= reductionVertical;
         this.motZ /= reductionHorizontal;
 
-        this.motY = knockbackVertical;
+        this.motY = profile.getVertical();
 
         this.motX -= d0 / (double) f1 * ((double) f2 - rangeReduction);
         this.motZ -= d1 / (double) f1 * ((double) f2 - rangeReduction);
