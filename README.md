@@ -15,10 +15,12 @@
 [SpigotV-0003] Update-libraries.patch
 [SpigotV-0004] Change-knockback-math.patch
 [SpigotV-0005] Add-range-reduction.patch
+[SpigotV-0005] Cleanup-unused-code.patch
 
 [ClubSpigot-????] Implement-knockback-reduction.patch
 [ClubSpigot-????] Implement-range-reduction.patch
 [ClubSpigot-????] Optimize-velocity-packet.patch
+[ClubSpigot-????] Fix-minecraft-noslow.patch
 
 [GoatSpigot-????] Custom-tps-command.patch
 
