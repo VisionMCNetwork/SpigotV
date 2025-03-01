@@ -265,13 +265,13 @@ public abstract class EntityHuman extends EntityLiving {
                 // Confluence - use faster randoms
                 Vec3D vec3d = new Vec3D((this.random.nextFloat() - 0.5D) * 0.1D, random.nextDouble() * 0.1D + 0.1D, 0.0D);
 
-                vec3d = vec3d.a(-this.pitch * 3.1415927F / 180.0F);
-                vec3d = vec3d.b(-this.yaw * 3.1415927F / 180.0F);
+                vec3d = vec3d.a(-this.pitch * (float) Math.PI / 180.0F);
+                vec3d = vec3d.b(-this.yaw * (float) Math.PI / 180.0F);
                 double d0 = (-this.random.nextFloat()) * 0.6D - 0.3D;
                 Vec3D vec3d1 = new Vec3D((this.random.nextFloat() - 0.5D) * 0.3D, d0, 0.6D);
 
-                vec3d1 = vec3d1.a(-this.pitch * 3.1415927F / 180.0F);
-                vec3d1 = vec3d1.b(-this.yaw * 3.1415927F / 180.0F);
+                vec3d1 = vec3d1.a(-this.pitch * (float) Math.PI / 180.0F);
+                vec3d1 = vec3d1.b(-this.yaw * (float) Math.PI / 180.0F);
                 vec3d1 = vec3d1.add(this.locX, this.locY + this.getHeadHeight(), this.locZ);
                 if (itemstack.usesData()) {
                     this.world.addParticle(EnumParticle.ITEM_CRACK, vec3d1.a, vec3d1.b, vec3d1.c, vec3d.a,
@@ -483,8 +483,8 @@ public abstract class EntityHuman extends EntityLiving {
         }
 
         if (damagesource != null) {
-            this.motX = (double) (-MathHelper.cos((this.aw + this.yaw) * 3.1415927F / 180.0F) * 0.1F);
-            this.motZ = (-MathHelper.sin((this.aw + this.yaw) * 3.1415927F / 180.0F) * 0.1F);
+            this.motX = (double) (-MathHelper.cos((this.aw + this.yaw) * (float) Math.PI / 180.0F) * 0.1F);
+            this.motZ = (-MathHelper.sin((this.aw + this.yaw) * (float) Math.PI / 180.0F) * 0.1F);
         } else {
             this.motX = this.motZ = 0.0D;
         }
@@ -585,16 +585,16 @@ public abstract class EntityHuman extends EntityLiving {
 
             if (flag) {
                 f = this.random.nextFloat() * 0.5F;
-                f1 = this.random.nextFloat() * 3.1415927F * 2.0F;
+                f1 = this.random.nextFloat() * (float) Math.PI * 2.0F;
                 entityitem.motX = (-MathHelper.sin(f1) * f);
                 entityitem.motZ = (double) (MathHelper.cos(f1) * f);
                 entityitem.motY = 0.20000000298023224D;
             } else {
                 f = 0.3F;
-                entityitem.motX = (double) (-MathHelper.sin(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F) * f);
-                entityitem.motZ = (double) (MathHelper.cos(this.yaw / 180.0F * 3.1415927F) * MathHelper.cos(this.pitch / 180.0F * 3.1415927F) * f);
-                entityitem.motY = (double) (-MathHelper.sin(this.pitch / 180.0F * 3.1415927F) * f + 0.1F);
-                f1 = this.random.nextFloat() * 3.1415927F * 2.0F;
+                entityitem.motX = (double) (-MathHelper.sin(this.yaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.pitch / 180.0F * (float) Math.PI) * f);
+                entityitem.motZ = (double) (MathHelper.cos(this.yaw / 180.0F * (float) Math.PI) * MathHelper.cos(this.pitch / 180.0F * (float) Math.PI) * f);
+                entityitem.motY = (double) (-MathHelper.sin(this.pitch / 180.0F * (float) Math.PI) * f + 0.1F);
+                f1 = this.random.nextFloat() * (float) Math.PI * 2.0F;
                 f = 0.02F * this.random.nextFloat();
                 entityitem.motX += Math.cos((double) f1) * (double) f;
                 entityitem.motY += (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.1F);
